@@ -3,14 +3,12 @@
 # Exit on command errors and treat unset variables as an error
 set -eu
 
-source _common.sh
-
 app=$YNH_APP_INSTANCE_NAME
 version=$(cat ../sources/version)
 
 # Retrieve arguments
 	domain=$YNH_APP_ARG_DOMAIN
-	path=$YNH_APP_ARG_PATH
+	path_url=$YNH_APP_ARG_PATH
 	admin=$YNH_APP_ARG_ADMIN
 	is_public=$YNH_APP_ARG_IS_PUBLIC
 
@@ -18,16 +16,16 @@ version=$(cat ../sources/version)
 	source /usr/share/yunohost/helpers
 
 # Correct path: puts a / at the start and nothing at the end
-	if [ "${path:0:1}" != "/" ]; then
-		path="/$path"
+	if [ "${path_url:0:1}" != "/" ]; then
+		path_url="/$path_url"
 	fi
-	if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then
-		path="${path:0:${#path}-1}"
+	if [ "${path_url:${#path_url}-1}" == "/" ] && [ ${#path_url} -gt 1 ]; then
+		path_url="${path_url:0:${#path_url}-1}"
 	fi
 
 # Check domain/path availability
-	sudo yunohost app checkurl "${domain}${path}" -a "$app" \
-		|| ynh_die "Path not available: ${domain}${path}"
+	sudo yunohost app checkurl "${domain}${path_url}" -a "$app" \
+		|| ynh_die "Path not available: ${domain}${path_url}"
 
 # Check admin user parameter
 	ynh_user_exists "$admin" \
@@ -74,7 +72,7 @@ version=$(cat ../sources/version)
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 	nginx_conf=../conf/nginx.conf
-	sed -i "s@YNH_WWW_PATH@${path:-/}@g" $nginx_conf
+	sed -i "s@YNH_WWW_PATH@${path_url:-/}@g" $nginx_conf
 	sed -i "s@YNH_WWW_ALIAS@$src_path/@g" $nginx_conf
 	sed -i "s@YNH_WWW_APP@$app@g" $nginx_conf
 	sudo cp $nginx_conf /etc/nginx/conf.d/$domain.d/$app.conf
