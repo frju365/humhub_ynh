@@ -37,7 +37,7 @@ source='https://sourceforge.net/projects/humhub/files/'
 # Copy source files
 	src_path=/var/www/$app
 	sudo mkdir -p $src_path
-	sudo wget -q "${source}humhub-${version}.zip/download" -O humhub-${version}.zip
+	sudo wget -q "https://www.humhub.org/en/download/package/humhub-${version}.zip" -O humhub-${version}.zip
 	sudo unzip -qq humhub-${version}.zip
 	sudo cp -a humhub-${version}/. $src_path
 
