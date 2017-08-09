@@ -100,11 +100,11 @@ version=$(cat ../sources/version)
 	admin_firstname=$(sudo yunohost user info "$admin" --output-as plain | ynh_get_plain_key firstname)
 	admin_lastname=$(sudo yunohost user info "$admin" --output-as plain | ynh_get_plain_key lastname)
 
-	ynh_local_curl "/index.php?r=installer/index" "Next"
+	ynh_local_curl "index.php?r=installer/index" "Next"
 
-	ynh_local_curl "/index.php?r=installer/setup/prerequisites" "Next"
+	ynh_local_curl "index.php?r=installer/setup/prerequisites" "Next"
 
-	ynh_local_curl "/index.php?r=installer/setup/database" \
+	ynh_local_curl "index.php?r=installer/setup/database" \
                  "DatabaseForm[hostname]=localhost"                   
 		 "DatabaseForm[username]=$dbuser"
 		 "DatabaseForm[password]=$dbpass"   
@@ -113,11 +113,11 @@ version=$(cat ../sources/version)
 	ynh_local_curl "/index.php?r=installer/config/basic" \
 		"ConfigBasicForm[name]=YunoHost"
 
-	ynh_local_curl "/index.php?r=installer/config/use-case" \
+	ynh_local_curl "index.php?r=installer/config/use-case" \
 		"UseCaseForm[useCase]=" \
 		"UseCaseForm[useCase]=other"
 
-	ynh_local_curl "/index.php?r=installer/config/admin" \
+	ynh_local_curl "index.php?r=installer/config/admin" \
 		"User[username]=$admin" \
 		"User[email]=$admin_email" \
 		"Password[newPassword]=$admin_temp_pass" \
@@ -126,7 +126,7 @@ version=$(cat ../sources/version)
 		"Profile[lastname]=$admin_lastname" \
 		"save"
 
-	ynh_local_curl "/index.php?r=installer/config/sample-data" \
+	ynh_local_curl "index.php?r=installer/config/sample-data" \
 		"SampleDataForm[sampleData]=0"
 
 	# Populate the LDAP parameters
