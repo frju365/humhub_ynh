@@ -5,7 +5,6 @@ set -eu
 
 app=$YNH_APP_INSTANCE_NAME
 version=$(cat ../sources/version)
-source='https://sourceforge.net/projects/humhub/files/'
 
 # Retrieve arguments
 	domain=$YNH_APP_ARG_DOMAIN
@@ -15,7 +14,6 @@ source='https://sourceforge.net/projects/humhub/files/'
 
 # Source YunoHost helpers
 	source /usr/share/yunohost/helpers
-	source ./_extrahelpers
 
 # Correct path: puts a / at the start and nothing at the end
 	if [ "${path:0:1}" != "/" ]; then
