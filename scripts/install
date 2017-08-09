@@ -57,11 +57,11 @@ source='https://sourceforge.net/projects/humhub/files/'
 	ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
 	
 # Conf
-	app_conf=../conf/common.php
-	sed -i "s@DBNAME_TO_CHANGE@$dbname@g" $app_conf
-	sed -i "s@DBUSER_TO_CHANGE@$dbuser@g" $app_conf
-	sed -i "s@DBPASS_TO_CHANGE@$dbpass@g" $app_conf
-	sudo cp $app_conf $src_path/protected/config/common.php
+	#app_conf=../conf/common.php
+	#sed -i "s@DBNAME_TO_CHANGE@$dbname@g" $app_conf
+	#sed -i "s@DBUSER_TO_CHANGE@$dbuser@g" $app_conf
+	#sed -i "s@DBPASS_TO_CHANGE@$dbpass@g" $app_conf
+	#sudo cp $app_conf $src_path/protected/config/common.php
 
 # Set permissions to app files
 	sudo chown -R www-data: $src_path
@@ -102,7 +102,15 @@ source='https://sourceforge.net/projects/humhub/files/'
 	admin_firstname=$(sudo yunohost user info "$admin" --output-as plain | ynh_get_plain_key firstname)
 	admin_lastname=$(sudo yunohost user info "$admin" --output-as plain | ynh_get_plain_key lastname)
 
-	ynh_local_curl "/index.php?r=installer/index/go" "go"
+	ynh_local_curl "/index.php?r=installer/index" "Next"
+
+	ynh_local_curl "/index.php?r=installer/setup/prerequisites" "Next"
+
+	ynh_local_curl "/index.php?r=installer/setup/database" \
+                 "DatabaseForm[hostname]=localhost"                   
+		 "DatabaseForm[username]=$dbuser"
+		 "DatabaseForm[password]=$dbpass"   
+		 "DatabaseForm[database]=$dbname"   
 
 	ynh_local_curl "/index.php?r=installer/config/basic" \
 		"ConfigBasicForm[name]=YunoHost"
